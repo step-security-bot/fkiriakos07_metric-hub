@@ -27,19 +27,24 @@ jobs:
       contents: read
     if: needs.changed.outputs.any_changed == 'true'
     steps:
+    - name: Harden the runner (Audit all outbound calls)
+      uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      with:
+        egress-policy: audit
+
     - name: Changed Files tests
       run: echo ${{ needs.changed.outputs.any_changed }} && echo ${{ needs.changed.outputs.all_changed_files }}
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
       with:
         path: ~/project
     - name: Setup python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
       with:
         python-version: "3.10"
         cache: 'pip'
     - name: restore_cache
-      uses: actions/cache@v3
+      uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3.5.0
       with:
         key: python-packages-v1-{{ .Branch }}-{{ checksum "requirements.in" }}-{{ checksum "requirements.txt" }}
         path: venv/
@@ -75,12 +80,17 @@ jobs:
       contents: read
     if: needs.changed.outputs.any_changed == 'true'
     steps:
+    - name: Harden the runner (Audit all outbound calls)
+      uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      with:
+        egress-policy: audit
+
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
       with:
         path: ~/project
     - name: Setup python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
       with:
         python-version: "3.10"
         cache: 'pip'

@@ -25,10 +25,15 @@ jobs:
       CLUSTER_NAME: 'jetstream-dev'
       CLUSTER_ZONE: 'us-central1-c'
     steps:
+    - name: Harden the runner (Audit all outbound calls)
+      uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+      with:
+        egress-policy: audit
+
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
     - name: Authenticate to GCP
-      uses: google-github-actions/auth@v2
+      uses: google-github-actions/auth@c200f3691d83b41bf9bbd8638997a462592937ed # v2.1.13
       id: google_auth
       with:
         workload_identity_provider: ${{ vars.GCPV2_GITHUB_WORKLOAD_IDENTITY_PROVIDER }}
@@ -36,7 +41,7 @@ jobs:
         project_id: ${{ vars.GCLOUD_PROJECT }}
         access_token_lifetime: 43200s
     - name: Set up GKE
-      uses: google-github-actions/get-gke-credentials@v2
+      uses: google-github-actions/get-gke-credentials@64bc7249bbcf78056bb92f14d3cedc2da193946c # v2.3.5
       with:
         cluster_name: ${{ env.CLUSTER_NAME }}
         location: ${{ env.CLUSTER_ZONE }}
